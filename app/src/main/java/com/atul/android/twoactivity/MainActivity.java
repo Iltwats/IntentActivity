@@ -1,5 +1,6 @@
 package com.atul.android.twoactivity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +22,60 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         b = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
+        if (savedInstanceState != null) {
+            boolean isVisible =
+                    savedInstanceState.getBoolean("reply_visible");
+            if (isVisible) {
+                b.textHeaderReply.setVisibility(View.VISIBLE);
+                b.textMessageReply.setText(savedInstanceState.getString("reply_text"));
+                b.textMessageReply.setVisibility(View.VISIBLE);
+            }
+        }
+
+        Log.d(LOG_TAG, "-------");
+        Log.d(LOG_TAG, "onCreate");
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(LOG_TAG, "onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(LOG_TAG, "onPause");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (b.textHeaderReply.getVisibility() == View.VISIBLE) {
+            outState.putBoolean("reply_visible", true);
+            outState.putString("reply_text",b.textMessageReply.getText().toString());
+        }
+    }
+
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final String EXTRA_MESSAGE = "com.atul.android.twoactivitiy.extra.MESSAGE";
     public static final int TEXT_REQUEST = 1;
